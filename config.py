@@ -2,20 +2,23 @@ import os
 from datetime import timedelta
 
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'solar-trading-secret-key-2025-super-secure-huggingface'
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'solar-energy-trading-super-secure-key-2025-huggingface-deployment-fixed'
     DATA_DIR = 'data'
     
-    # Session configuration for Hugging Face Spaces
-    SESSION_COOKIE_SECURE = False
+    # Session cookie configuration optimized for Hugging Face proxy
+    SESSION_COOKIE_NAME = 'solar_session'
     SESSION_COOKIE_HTTPONLY = True
-    SESSION_COOKIE_SAMESITE = 'Lax'
-    PERMANENT_SESSION_LIFETIME = timedelta(hours=24)
+    SESSION_COOKIE_SAMESITE = None  # Allow cookies through proxy
+    SESSION_COOKIE_SECURE = False  # HF handles HTTPS at proxy level
+    SESSION_COOKIE_PATH = '/'
+    PERMANENT_SESSION_LIFETIME = timedelta(days=7)
     
-    # Remember cookie for persistent login
+    # Remember cookie settings
+    REMEMBER_COOKIE_NAME = 'solar_remember'
     REMEMBER_COOKIE_DURATION = timedelta(days=7)
-    REMEMBER_COOKIE_SECURE = False
     REMEMBER_COOKIE_HTTPONLY = True
-    REMEMBER_COOKIE_SAMESITE = 'Lax'
+    REMEMBER_COOKIE_SAMESITE = None
+    REMEMBER_COOKIE_SECURE = False
     
     # Trading parameters
     MIN_ORDER_SIZE = 1  # MW
