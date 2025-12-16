@@ -9,13 +9,10 @@ def login():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        
         user = User.authenticate(username, password)
         
         if user:
-            # FIXED: Added remember=True for persistent sessions
             login_user(user, remember=True)
-            
             if user.user_type == 'buyer':
                 return redirect(url_for('dashboard.buyer_dashboard'))
             else:
