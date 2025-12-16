@@ -7,12 +7,28 @@ class User(UserMixin):
         self.id = user_id
         self.username = username
         self.password = password
-        self.user_type = user_type  # 'buyer' or 'seller'
+        self.user_type = user_type
         self.company_name = company_name
         self.capacity_mw = capacity_mw
         self.location = location
         self.balance = balance
         self.email = email
+    
+    def get_id(self):
+        """Override get_id to ensure it returns a string"""
+        return str(self.id)
+    
+    @property
+    def is_authenticated(self):
+        return True
+    
+    @property
+    def is_active(self):
+        return True
+    
+    @property
+    def is_anonymous(self):
+        return False
     
     @staticmethod
     def get_by_id(user_id):
@@ -20,13 +36,13 @@ class User(UserMixin):
         users = handler.load()
         
         for user in users:
-            if user['id'] == user_id:
+            if user['id'] == user_id or user['id'] == str(user_id):
                 return User(
                     user['id'], user['username'], user['password'],
                     user['user_type'], user['company_name'], 
                     user['capacity_mw'], user['location'], 
                     user['balance'], user['email']
-                )  # FIXED: Added closing parenthesis
+                )
         return None
     
     @staticmethod
@@ -41,7 +57,7 @@ class User(UserMixin):
                     user['user_type'], user['company_name'], 
                     user['capacity_mw'], user['location'], 
                     user['balance'], user['email']
-                )  # FIXED: Added closing parenthesis
+                )
         return None
     
     def update_balance(self, amount):
@@ -67,4 +83,4 @@ class User(UserMixin):
             'location': self.location,
             'balance': self.balance,
             'email': self.email
-        }  # FIXED: Added closing brace
+        }
