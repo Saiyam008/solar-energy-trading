@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}Seller Dashboard - Solar Energy Trading{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4"><i class="fas fa-tachometer-alt"></i> Seller Dashboard</h2>
+    </div>
+</div>
+
+<!-- Market Overview -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <h6 class="card-title"><i class="fas fa-rupee-sign"></i> Current Market Price</h6>
+                <h3>₹{{ "%.2f"|format(market_data.current_price) }}/MW</h3>
+                <small>Last updated: {{ market_data.last_updated[:16] }}</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h6 class="card-title"><i class="fas fa-bolt"></i> Total Sold</h6>
+                <h3>{{ "%.2f"|format(stats.total_sold) }} MW</h3>
+                <small>Avg: ₹{{ "%.2f"|format(stats.avg_price) }}/MW</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <h6 class="card-title"><i class="fas fa-file-alt"></i> Active Orders</h6>
+                <h3>{{ stats.active_orders }}</h3>
+                <small>Pending execution</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <h6 class="card-title"><i class="fas fa-file-contract"></i> Active Contracts</h6>
+                <h3>{{ stats.active_contracts }}</h3>
+                <small>Long-term agreements</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-line"></i> Price Trend</h5>
+            </div>
+            <div class="card-body">
+                <div id="priceChart"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-bar"></i> Trading Volume</h5>
+            </div>
+            <div class="card-body">
+                <div id="volumeChart"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Capacity Info -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="alert alert-info">
+            <h5><i class="fas fa-solar-panel"></i> Your Solar Capacity</h5>
+            <p class="mb-0"><strong>Total Capacity:</strong> {{ current_user.capacity_mw }} MW | <strong>Location:</strong> {{ current_user.location }}</p>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Trades -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-history"></i> Recent Trades</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date & Time</th>
+                                <th>Quantity (MW)</th>
+                                <th>Price (₹/MW)</th>
+                                <th>Total Amount (₹)</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for trade in recent_trades %}
+                            <tr>
+                                <td>{{ trade.timestamp[:19].replace('T', ' ') }}</td>
+                                <td>{{ "%.2f"|format(trade.quantity_mw) }}</td>
+                                <td>₹{{ "%.2f"|format(trade.price_per_mw) }}</td>
+                                <td>₹{{ "%.2f"|format(trade.total_amount) }}</td>
+                                <td><span class="badge bg-success">{{ trade.status }}</span></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Load price chart
+    fetch('{{ url_for("dashboard.price_chart") }}')
+        .then(response => response.json())
+        .then(data => {
+            const chartData = JSON.parse(data.chart);
+            Plotly.newPlot('priceChart', chartData.data, chartData.layout);
+        });
+
+    // Load volume chart
+    fetch('{{ url_for("dashboard.volume_chart") }}')
+        .then(response => response.json())
+        .then(data => {
+            const chartData = JSON.parse(data.chart);
+            Plotly.newPlot('volumeChart', chartData.data, chartData.layout);
+        });
+</script>
+{% endblock %}

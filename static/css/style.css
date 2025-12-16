@@ -1,0 +1,132 @@
+:root {
+    --primary-color: #667eea;
+    --secondary-color: #764ba2;
+    --success-color: #00d97e;
+    --danger-color: #e63946;
+    --warning-color: #f6c23e;
+    --info-color: #17a2b8;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.card-header {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom: none;
+    font-weight: 600;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.table thead th {
+    border-bottom: 2px solid #dee2e6;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0,0,0,0.025);
+}
+
+.btn {
+    border-radius: 5px;
+    padding: 8px 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.badge {
+    padding: 0.4em 0.6em;
+    font-weight: 600;
+}
+
+h2, h3, h4, h5 {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.alert {
+    border-radius: 8px;
+    border: none;
+}
+
+/* Trading specific styles */
+.sticky-top {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+#orderBookTable tr {
+    font-size: 0.9rem;
+}
+
+#recentTradesTable tr {
+    font-size: 0.85rem;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Animation for price updates */
+@keyframes priceFlash {
+    0%, 100% { background-color: transparent; }
+    50% { background-color: rgba(255, 215, 0, 0.3); }
+}
+
+.price-flash {
+    animation: priceFlash 1s ease-in-out;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .table {
+        font-size: 0.85rem;
+    }
+}
