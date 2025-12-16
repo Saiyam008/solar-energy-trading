@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, jsonify
+from flask import Blueprint, render_template, jsonify, redirect, url_for
 from flask_login import login_required, current_user
 from models.order import Order
 from models.trade import Trade
@@ -11,6 +11,8 @@ bp = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 @bp.route('/buyer')
 @login_required
 def buyer_dashboard():
+    print(f"[DEBUG] Buyer dashboard accessed by: {current_user.username}")
+    
     if current_user.user_type != 'buyer':
         return redirect(url_for('dashboard.seller_dashboard'))
     
@@ -40,6 +42,8 @@ def buyer_dashboard():
 @bp.route('/seller')
 @login_required
 def seller_dashboard():
+    print(f"[DEBUG] Seller dashboard accessed by: {current_user.username}")
+    
     if current_user.user_type != 'seller':
         return redirect(url_for('dashboard.buyer_dashboard'))
     
